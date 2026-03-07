@@ -5,7 +5,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-username/your-repo.git'
+                git 'https://github.com/yash1015/Static-Website-CI-CD-Pipeline-Using-Jenkins-and-Webhook.git'
             }
         }
 
