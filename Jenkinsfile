@@ -1,31 +1,50 @@
 pipeline {
-    agent any
+agent any
 
-    stages {
+```
+stages {
 
-        stage('Clone Repository') {
-            steps {
-               git branch: 'main', url: 'https://github.com/yash1015/Static-Website-CI-CD-Pipeline-Using-Jenkins-and-Webhook.git'
-            }
+    stage('Install Dependencies') {
+        steps {
+            sh 'npm install'
         }
+    }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t node-app .'
-            }
+    stage('Run Tests') {
+        steps {
+            sh 'npm test'
         }
+    }
 
-        stage('Stop Old Container') {
-            steps {
-                sh 'docker rm -f node-container || true'
-            }
+    stage('Build Docker Image') {
+        steps {
+            sh 'docker build -t node-app .'
         }
+    }
 
-        stage('Run New Container') {
-            steps {
-                sh 'docker run -d -p 3000:3000 --name node-container node-app'
-            }
+    stage('Stop Old Container') {
+        steps {
+            sh 'docker rm -f node-container || true'
         }
+    }
 
+    stage('Run New Container') {
+        steps {
+            sh 'docker run -d -p 3000:3000 --name node-container node-app'
+        }
+    }
+
+}
+
+post {
+    success {
+        echo '✅ Pipeline completed successfully. Application deployed.'
+    }
+    failure {
+        echo '❌ Pipeline failed. Check logs.'
     }
 }
+```
+
+}
+

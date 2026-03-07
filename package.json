@@ -1,14 +1,13 @@
 {
   "name": "devops-journey",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "DevOps Journey presentation app",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node tests/server.test.js"
   },
-  "keywords": [],
+  "keywords": ["devops", "cicd", "jenkins"],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "license": "ISC"
 }
