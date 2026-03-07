@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The DevOps Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050a0e;
+      --surface: #0b1520;
+      --border: #1a3a4a;
+      --accent: #00d4ff;
+      --accent2: #00ff88;
+      --accent3: #ff6b35;
+      --accent4: #a855f7;
+      --text: #c8e8f0;
+      --muted: #4a7a8a;
+      --glow: 0 0 20px rgba(0, 212, 255, 0.3);
+      --glow2: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(40px); }
+    }
+
+    /* Scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.05) 2px,
+        rgba(0,0,0,0.05) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: pulse 6s ease-in-out infinite;
+    }
+    .hero-orb:nth-child(1) { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -100px; }
+    .hero-orb:nth-child(2) { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: 3s; }
+    .hero-orb:nth-child(3) { width: 300px; height: 300px; background: var(--accent4); top: 40%; left: 60%; animation-delay: 1.5s; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.15; }
+      50% { transform: scale(1.1); opacity: 0.25; }
+    }
+
+    .hero-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      letter-spacing: 0.3em;
+      margin-bottom: 2rem;
+      animation: fadeInDown 0.8s ease;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 1rem;
+      animation: fadeInDown 1s ease 0.2s both;
+    }
+
+    .hero h1 span.line1 { display: block; color: var(--text); }
+    .hero h1 span.line2 {
+      display: block;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      animation: fadeInDown 1s ease 0.4s both;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      animation: fadeInDown 1s ease 0.6s both;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 0.15em;
+      animation: fadeIn 2s ease 1s both;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(var(--accent), transparent);
+      animation: scrollLine 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ─── SECTION WRAPPER ─── */
+    .section {
+      position: relative;
+      z-index: 2;
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      margin-bottom: 4rem;
+    }
+
+    /* ─── PIPELINE ─── */
+    .pipeline-section {
+      background: linear-gradient(180deg, transparent, rgba(0,212,255,0.02), transparent);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding: 2rem 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .pipeline::-webkit-scrollbar { display: none; }
+
+    .pipe-stage {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .pipe-stage:hover { transform: translateY(-8px); }
+    .pipe-stage:hover .pipe-icon { box-shadow: var(--glow), inset 0 0 20px rgba(0,212,255,0.1); border-color: var(--accent); }
+
+    .pipe-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .pipe-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .pipe-arrow {
+      flex: 0 0 auto;
+      width: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 2.5rem;
+    }
+
+    .pipe-arrow svg {
+      width: 40px;
+      opacity: 0.3;
+    }
+
+    .pipe-arrow svg line, .pipe-arrow svg polyline {
+      stroke: var(--accent);
+      stroke-width: 1.5;
+    }
+
+    /* ─── JOURNEY TIMELINE ─── */
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, var(--accent), var(--accent4), var(--accent2));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.6s ease;
+    }
+
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -3.4rem;
+      top: 0.4rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timeline-dot::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .timeline-phase {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-desc {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      max-width: 700px;
+    }
+
+    .tool-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+
+    .pill-cyan { color: var(--accent); border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.05); }
+    .pill-green { color: var(--accent2); border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.05); }
+    .pill-orange { color: var(--accent3); border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.05); }
+    .pill-purple { color: var(--accent4); border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.05); }
+
+    /* ─── PILLARS GRID ─── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .pillar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--card-color, var(--accent));
+    }
+
+    .pillar-card:hover {
+      border-color: var(--card-color, var(--accent));
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .pillar-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .pillar-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--card-color, var(--accent));
+      margin-bottom: 0.5rem;
+    }
+
+    .pillar-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .pillar-metric {
+      margin-top: 1.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--card-color, var(--accent));
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── METRICS ─── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .metric-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    .metric-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .metric-unit {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    .metric-bar {
+      margin-top: 1rem;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .metric-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 1px;
+      animation: fillBar 2s ease 0.5s both;
+      transform-origin: left;
+    }
+
+    @keyframes fillBar {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    /* ─── MINDSET ─── */
+    .mindset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .mindset-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .mindset-item:hover { border-color: var(--accent2); }
+
+    .mindset-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid var(--accent2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      color: var(--accent2);
+    }
+
+    .mindset-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    /* ─── TERMINAL BLOCK ─── */
+    .terminal {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .terminal-bar {
+      background: #111;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .t-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .t-dot:nth-child(1) { background: #ff5f56; }
+    .t-dot:nth-child(2) { background: #ffbd2e; }
+    .t-dot:nth-child(3) { background: #27c93f; }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      line-height: 2;
+    }
+
+    .t-prompt { color: var(--accent2); }
+    .t-cmd { color: var(--text); }
+    .t-out { color: var(--muted); padding-left: 1rem; }
+    .t-success { color: var(--accent2); }
+    .t-info { color: var(--accent); }
+    .t-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--accent);
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .footer-tagline {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 3rem;
+      background: rgba(5, 10, 14, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(26,58,74,0.5);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider-icon {
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DEVOPS_</div>
+  <ul class="nav-links">
+    <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#pillars">Pillars</a></li>
+    <li><a href="#metrics">Metrics</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-badge">// system::online — v2.6.0</div>
+  <h1>
+    <span class="line1">THE</span>
+    <span class="line2">DEVOPS JOURNEY</span>
+  </h1>
+  <p class="hero-sub">From siloed development to fully automated, continuously integrated and delivered software — a transformation story.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Core Stages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Feedback Loop</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">99.9%</div>
+      <div class="stat-label">Uptime Goal</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Manual Deploys</div>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL TO EXPLORE</div>
+</section>
+
+<!-- PIPELINE -->
+<div class="divider"><span class="divider-icon">// 01 — CI/CD PIPELINE</span></div>
+<section class="section pipeline-section" id="pipeline">
+  <div class="section-label">// the infinite loop</div>
+  <h2 class="section-title">The DevOps Pipeline</h2>
+  <p class="section-desc">Every piece of code travels through a gauntlet of automated gates — from idea to production in minutes, not months.</p>
+
+  <div class="pipeline">
+    <div class="pipe-stage">
+      <div class="pipe-icon">🧠</div>
+      <div class="pipe-label">PLAN</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">💻</div>
+      <div class="pipe-label">CODE</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">🔨</div>
+      <div class="pipe-label">BUILD</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">🧪</div>
+      <div class="pipe-label">TEST</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">📦</div>
+      <div class="pipe-label">RELEASE</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">🚀</div>
+      <div class="pipe-label">DEPLOY</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">📡</div>
+      <div class="pipe-label">OPERATE</div>
+    </div>
+    <div class="pipe-arrow"><svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="30" y2="10"/><polyline points="22,4 30,10 22,16"/></svg></div>
+    <div class="pipe-stage">
+      <div class="pipe-icon">📊</div>
+      <div class="pipe-label">MONITOR</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY TIMELINE -->
+<div class="divider"><span class="divider-icon">// 02 — EVOLUTION</span></div>
+<section class="section" id="journey">
+  <div class="section-label">// the transformation</div>
+  <h2 class="section-title">The DevOps Journey</h2>
+  <p class="section-desc">A battle-tested path from waterfall chaos to elite engineering culture — milestone by milestone.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 01</div>
+      <h3 class="timeline-title">The Before Times — Waterfall</h3>
+      <p class="timeline-desc">Months-long release cycles. Dev throws code over the wall to Ops. Deployment day is a war room event. Nobody sleeps.</p>
+      <div class="tool-pills">
+        <span class="pill pill-orange">Manual Deploys</span>
+        <span class="pill pill-orange">6-Month Cycles</span>
+        <span class="pill pill-orange">Silos</span>
+        <span class="pill pill-orange">Fear</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 02</div>
+      <h3 class="timeline-title">Version Control & Collaboration</h3>
+      <p class="timeline-desc">Teams adopt Git. Pull requests replace email threads. Code review becomes cultural. The foundation of everything else is laid.</p>
+      <div class="tool-pills">
+        <span class="pill pill-cyan">Git</span>
+        <span class="pill pill-cyan">GitHub / GitLab</span>
+        <span class="pill pill-cyan">PR Reviews</span>
+        <span class="pill pill-cyan">Branching Strategy</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 03</div>
+      <h3 class="timeline-title">Continuous Integration</h3>
+      <p class="timeline-desc">Every commit triggers automated builds and tests. Broken builds are caught in minutes. Confidence replaces fear of integration.</p>
+      <div class="tool-pills">
+        <span class="pill pill-cyan">Jenkins</span>
+        <span class="pill pill-cyan">GitHub Actions</span>
+        <span class="pill pill-cyan">CircleCI</span>
+        <span class="pill pill-green">Unit Tests</span>
+        <span class="pill pill-green">Linting</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 04</div>
+      <h3 class="timeline-title">Infrastructure as Code</h3>
+      <p class="timeline-desc">Servers are no longer snowflakes. Infrastructure is versioned, reviewed, and reproducible. "It works on my machine" becomes extinct.</p>
+      <div class="tool-pills">
+        <span class="pill pill-purple">Terraform</span>
+        <span class="pill pill-purple">Ansible</span>
+        <span class="pill pill-purple">Pulumi</span>
+        <span class="pill pill-cyan">AWS / GCP / Azure</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 05</div>
+      <h3 class="timeline-title">Containerization & Orchestration</h3>
+      <p class="timeline-desc">Applications run in containers. Environments are identical from dev to prod. Kubernetes orchestrates thousands of services at scale.</p>
+      <div class="tool-pills">
+        <span class="pill pill-cyan">Docker</span>
+        <span class="pill pill-cyan">Kubernetes</span>
+        <span class="pill pill-green">Helm</span>
+        <span class="pill pill-green">Service Mesh</span>
+        <span class="pill pill-purple">Istio</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 06</div>
+      <h3 class="timeline-title">Continuous Delivery & Deployment</h3>
+      <p class="timeline-desc">Deployment is automated, tested, and safe. Feature flags, canary releases, and blue-green deployments enable zero-downtime deploys.</p>
+      <div class="tool-pills">
+        <span class="pill pill-green">ArgoCD</span>
+        <span class="pill pill-green">Spinnaker</span>
+        <span class="pill pill-cyan">Feature Flags</span>
+        <span class="pill pill-cyan">Canary Releases</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 07</div>
+      <h3 class="timeline-title">Observability & Monitoring</h3>
+      <p class="timeline-desc">The three pillars: Logs, Metrics, Traces. Systems become transparent. SLOs and error budgets guide engineering decisions.</p>
+      <div class="tool-pills">
+        <span class="pill pill-orange">Prometheus</span>
+        <span class="pill pill-orange">Grafana</span>
+        <span class="pill pill-orange">Datadog</span>
+        <span class="pill pill-cyan">OpenTelemetry</span>
+        <span class="pill pill-cyan">Jaeger</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-phase">// phase 08 — elite</div>
+      <h3 class="timeline-title">Platform Engineering & DevSecOps</h3>
+      <p class="timeline-desc">Security is left-shifted into every stage. Internal developer platforms abstract complexity. Teams ship 10x faster, safely.</p>
+      <div class="tool-pills">
+        <span class="pill pill-purple">Backstage</span>
+        <span class="pill pill-purple">Snyk</span>
+        <span class="pill pill-purple">Vault</span>
+        <span class="pill pill-green">SBOM</span>
+        <span class="pill pill-green">Supply Chain Security</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<div class="divider"><span class="divider-icon">// 03 — PILLARS</span></div>
+<section class="section" id="pillars">
+  <div class="section-label">// the foundations</div>
+  <h2 class="section-title">Core Pillars</h2>
+  <p class="section-desc">Every high-performing DevOps culture is built on these non-negotiables.</p>
+
+  <div class="pillars">
+    <div class="pillar-card" style="--card-color: #00d4ff;">
+      <div class="pillar-icon">🔄</div>
+      <div class="pillar-title">Continuous Everything</div>
+      <p class="pillar-desc">CI/CD pipelines that run on every commit. Automated testing at every layer. Continuous feedback from users and systems alike.</p>
+      <div class="pillar-metric">→ deploy frequency: daily or more</div>
+    </div>
+
+    <div class="pillar-card" style="--card-color: #00ff88;">
+      <div class="pillar-icon">🤝</div>
+      <div class="pillar-title">Shared Ownership</div>
+      <p class="pillar-desc">"You build it, you run it." Dev and Ops share on-call. Everyone owns reliability. No more throwing code over the wall.</p>
+      <div class="pillar-metric">→ MTTR: minutes, not days</div>
+    </div>
+
+    <div class="pillar-card" style="--card-color: #ff6b35;">
+      <div class="pillar-icon">📐</div>
+      <div class="pillar-title">Infrastructure as Code</div>
+      <p class="pillar-desc">Every environment is versioned, peer-reviewed, and automatically provisioned. Drift becomes impossible. Reproductions are instant.</p>
+      <div class="pillar-metric">→ environment parity: 100%</div>
+    </div>
+
+    <div class="pillar-card" style="--card-color: #a855f7;">
+      <div class="pillar-icon">🛡️</div>
+      <div class="pillar-title">Security as Code</div>
+      <p class="pillar-desc">Vulnerability scanning in CI. Secrets management automated. Compliance policies enforced in code, not spreadsheets.</p>
+      <div class="pillar-metric">→ vulnerabilities caught: pre-prod</div>
+    </div>
+
+    <div class="pillar-card" style="--card-color: #00d4ff;">
+      <div class="pillar-icon">📊</div>
+      <div class="pillar-title">Observability First</div>
+      <p class="pillar-desc">If you can't measure it, you can't improve it. SLOs, error budgets, and distributed tracing give full system transparency.</p>
+      <div class="pillar-metric">→ MTTD: seconds, not hours</div>
+    </div>
+
+    <div class="pillar-card" style="--card-color: #00ff88;">
+      <div class="pillar-icon">🧪</div>
+      <div class="pillar-title">Blameless Culture</div>
+      <p class="pillar-desc">Post-mortems are learning opportunities, not blame sessions. Psychological safety unlocks honest reporting and systemic improvement.</p>
+      <div class="pillar-metric">→ incidents become improvements</div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="divider"><span class="divider-icon">// 04 — DORA METRICS</span></div>
+<section class="section" id="metrics">
+  <div class="section-label">// measuring elite performance</div>
+  <h2 class="section-title">DORA Metrics</h2>
+  <p class="section-desc">The four key metrics used by elite engineering teams to benchmark DevOps performance.</p>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-value">30+</div>
+      <div class="metric-unit">per day</div>
+      <div class="metric-label">Deployment Frequency</div>
+      <div class="metric-bar"><div class="metric-fill" style="width:95%"></div></div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-value">&lt;1h</div>
+      <div class="metric-unit">lead time</div>
+      <div class="metric-label">Change Lead Time</div>
+      <div class="metric-bar"><div class="metric-fill" style="width:90%"></div></div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-value">&lt;1h</div>
+      <div class="metric-unit">MTTR</div>
+      <div class="metric-label">Restore Service Time</div>
+      <div class="metric-bar"><div class="metric-fill" style="width:85%"></div></div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-value">&lt;5%</div>
+      <div class="metric-unit">failure rate</div>
+      <div class="metric-label">Change Failure Rate</div>
+      <div class="metric-bar"><div class="metric-fill" style="width:75%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MINDSET -->
+<div class="divider"><span class="divider-icon">// 05 — MINDSET</span></div>
+<section class="section">
+  <div class="section-label">// the culture shift</div>
+  <h2 class="section-title">The DevOps Mindset</h2>
+  <p class="section-desc">Tools enable DevOps. Culture makes it survive.</p>
+
+  <div class="mindset-grid">
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">Automate everything that can be automated — manual steps are tech debt.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">Small, frequent releases reduce risk exponentially versus big-bang deploys.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">Failure is inevitable — optimize for fast detection and recovery.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">Every incident is a learning opportunity — never waste a good post-mortem.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">If it's not in version control, it doesn't exist. Infrastructure included.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">Shift security left — finding a CVE in dev costs 100x less than in prod.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">Measure twice, deploy once — SLOs and error budgets guide risk tolerance.</div>
+    </div>
+    <div class="mindset-item">
+      <div class="mindset-check">✓</div>
+      <div class="mindset-text">The best DevOps teams make deployment boring — and that's a feature.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TERMINAL -->
+<div class="divider"><span class="divider-icon">// LIVE</span></div>
+<section class="section">
+  <div class="section-label">// it's always deploying somewhere</div>
+  <h2 class="section-title">Right Now</h2>
+  <p class="section-desc">While you're reading this, somewhere in the world, a pipeline is running.</p>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+      <div class="terminal-title">pipeline — prod-deploy — 03:42:17</div>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">$ </span><span class="t-cmd">git push origin main</span></div>
+      <div class="t-out">Counting objects: 47, done.</div>
+      <div class="t-out">Compressing objects: 100% (31/31)</div>
+      <div class="t-success">✓  Trigger: CI pipeline started — run #4821</div>
+      <br>
+      <div><span class="t-info">[ BUILD   ]</span> <span class="t-cmd">docker build -t app:sha-a3f9d2c .</span></div>
+      <div class="t-success">✓  Image built in 47s — 284MB</div>
+      <br>
+      <div><span class="t-info">[ TEST    ]</span> <span class="t-cmd">pytest --cov=src tests/</span></div>
+      <div class="t-success">✓  847 passed, 0 failed — coverage: 94%</div>
+      <br>
+      <div><span class="t-info">[ SCAN    ]</span> <span class="t-cmd">snyk container test app:sha-a3f9d2c</span></div>
+      <div class="t-success">✓  No critical vulnerabilities found</div>
+      <br>
+      <div><span class="t-info">[ DEPLOY  ]</span> <span class="t-cmd">kubectl set image deploy/app app=app:sha-a3f9d2c</span></div>
+      <div class="t-out">  Canary: 10% traffic → new version</div>
+      <div class="t-out">  Error rate: 0.01% ✓  P99 latency: 82ms ✓</div>
+      <div class="t-out">  Canary: 100% traffic → new version</div>
+      <div class="t-success">✓  Deployment complete — 0 downtime — 4m 22s total</div>
+      <br>
+      <div><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DEVOPS_JOURNEY</div>
+  <div class="footer-tagline">// build · test · deploy · monitor · repeat</div>
+</footer>
+
+<script>
+  // Intersection observer for timeline animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+
+  // Stagger timeline items
+  document.querySelectorAll('.timeline-item').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.1}s`;
+  });
+
+  // Animated counter for hero stats
+  function animateCounter(el, target, suffix = '') {
+    let current = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      el.textContent = Math.floor(current) + suffix;
+    }, 30);
+  }
+
+  // Nav active highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 100;
+      if (window.scrollY >= top) current = section.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === `#${current}`
+        ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
