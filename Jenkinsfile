@@ -41,7 +41,7 @@ post {
         echo '✅ Pipeline completed successfully. Application deployed.'
     }
     failure {
-        echo '❌ Pipeline failed. Check logs.'
+        echo '❌ Pipeline failed. Check logs pls.'
     }
 }
 
