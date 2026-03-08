@@ -3,7 +3,7 @@
 ## Overview
 
 This project demonstrates a simple **CI/CD pipeline** for deploying a Node.js static website using **Jenkins, Docker, and GitHub Webhooks**.
-Whenever code is pushed to the GitHub repository, Jenkins automatically triggers a pipeline to test, build, and deploy the application.
+Whenever code is pushed to the GitHub repository, Jenkins automatically triggers a pipeline to test, build, and deploy the application on server .
 
 ---
 
