@@ -1,4 +1,4 @@
-# Static Website CI/CD Pipeline Using Jenkins and Webhooks
+Static Website CI/CD Pipeline Using Jenkins and Webhooks
 
 ## Overview
 
